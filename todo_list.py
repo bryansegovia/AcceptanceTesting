@@ -1,44 +1,50 @@
-class ToDoListManager:
-    def __init__(self):
-        self.tasks = []
+class Task:
+    def __init__(self, nombre, estado="Pendiente"):
+        self.nombre = nombre
+        self.estado = estado
 
-    def add_task(self, task):
-        """Add a new task to the to-do list."""
-        self.tasks.append({'task': task, 'completed': False})
+    def completar(self):
+        self.estado = "Completada"
 
-    def list_tasks(self):
-        """List all the tasks in the to-do list."""
-        for idx, task in enumerate(self.tasks, start=1):
-            status = 'Completed' if task['completed'] else 'Pending'
-            print(f"{idx}. {task['task']} - {status}")
+tasks_list = []
+def add_task(nombre):
+    global tasks_list
+    task = Task(nombre)
+    tasks_list.append(task)
 
-    def mark_task_completed(self, task_number):
-        """Mark a task as completed."""
-        if 0 < task_number <= len(self.tasks):
-            self.tasks[task_number - 1]['completed'] = True
-        else:
-            print("Invalid task number.")
+def list_all_task():
+    print("Tasks:")
+    for task in tasks_list:
+        print(f"\t- {task.nombre} ({task.estado})")
 
-    def clear_tasks(self):
-        """Clear the entire to-do list."""
-        self.tasks.clear()
+def mark_completed(task):
+    task.completar()
 
-    # Nueva funcionalidad
-    def mark_all_tasks_completed(self):
-        """Mark all tasks as completed."""
-        for task in self.tasks:
-            task['completed'] = True
+def clear_completed():
+    global tasks_list
+    tasks_list = [task for task in tasks_list if task.estado == "Pendiente"]
 
-# Example usage:
-if __name__ == "__main__":
-    manager = ToDoListManager()
-    manager.add_task("Buy groceries")
-    manager.add_task("Read a book")
-    manager.add_task("Go for a walk")
-    manager.list_tasks()
-    manager.mark_task_completed(1)
-    manager.list_tasks()
-    manager.mark_all_tasks_completed()
-    manager.list_tasks()
-    manager.clear_tasks()
-    manager.list_tasks()
+def clear_all_task():
+    global tasks_list
+    tasks_list = []
+
+def mark_all_completed():
+    global tasks_list
+    for task in tasks_list:
+        task.completar()
+
+def find_task_by_name(task_name):
+    global tasks_list
+    for task in tasks_list:
+        if task.nombre == task_name:
+            return task
+    return None
+
+def get_all_task_names():
+    global tasks_list
+    return [task.nombre for task in tasks_list]
+
+def mark_completed_with_name(task_name):
+    for task in tasks_list:
+        if task.nombre == task_name:
+            task.completar()
